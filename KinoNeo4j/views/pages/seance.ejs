@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="pl">
+<head>
+    <%- include ("../partials/head") %>
+</head>
+<body class="bg-light">
+<%- include ("../partials/header") %>
+<main>
+    <div class="container my-4">
+        <div class="row my-4">
+            <div class="col-12">
+                <a href="/seance/new" type="button" class="btn btn-primary">Dodaj seans</a>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12 accordion">
+                <div class="card">
+                    <div class="card-header" id="headingOne">
+                        <h4 class="mb-0">
+                            <a class="btn-block" type="button" data-toggle="collapse" data-target="#collapseOne"
+                               aria-expanded="true" aria-controls="collapseOne">
+                                Przyszłe seanse
+                            </a>
+                        </h4>
+                    </div>
+                    <div id="collapseOne" class="collapse show" aria-labelledby="headingOne">
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="table table-striped">
+                                    <thead>
+                                    <tr>
+                                        <th scope="col">Data i godzina</th>
+                                        <th scope="col">Film</th>
+                                        <th scope="col">Dostępnych biletów</th>
+                                        <th scope="col">Cena</th>
+                                        <th scope="col"></th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <% future && future.forEach(function(seance) { %>
+                                        <tr>
+                                            <td><%= seance.dateTime %></td>
+                                            <td><a href="/movie/id/<%= seance.movieId %>"><%= seance.movieName %></a></td>
+                                            <td><%= seance.availablePlace %></td>
+                                            <td><%= seance.price %></td>
+                                            <td>
+                                                <a href="/seance/id/<%= seance.id %>" type="button" class="btn btn-primary">Podgląd</a>
+                                                <a href="/seance/id/<%= seance.id %>/reservation" type="button" class="btn btn-primary" <%= !seance.availablePlace ? "hidden" : null %>>Zarezerwuj bilet</a>
+                                                <button class="btn btn-danger" type="button" data-toggle="modal" data-target="#modalDelete<%= seance.id %>">
+                                                    Usuń
+                                                </button>
+                                                <%- include('../partials/modalDelete', {action: `/seance/id/${seance.id}`, id: seance.id}); %>
+                                            </td>
+                                        </tr>
+                                    <% }); %>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-header" id="headingTwo">
+                        <h4 class="mb-0">
+                            <a class="btn-block" type="button" data-toggle="collapse" data-target="#collapseTwo"
+                               aria-expanded="true" aria-controls="collapseTwo">
+                                Historia seansów
+                            </a>
+                        </h4>
+                    </div>
+                    <div id="collapseTwo" class="collapse show" aria-labelledby="headingTwo">
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="table table-striped">
+                                    <thead>
+                                    <tr>
+                                        <th scope="col">Data i godzina</th>
+                                        <th scope="col">Film</th>
+                                        <th scope="col">Dostępne miejsca</th>
+                                        <th scope="col">Cena</th>
+                                        <th scope="col"></th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <% history && history.forEach(function(seance) { %>
+                                        <tr>
+                                            <td><%= seance.dateTime %></td>
+                                            <td><a href="/movie/id/<%= seance.movieId %>"><%= seance.movieName %></a></td>
+                                            <td><%= seance.availablePlace %></td>
+                                            <td><%= seance.price %></td>
+                                            <td>
+                                                <a href="/seance/id/<%= seance.id %>" type="button" class="btn btn-primary">Podgląd</a>
+                                            </td>
+                                        </tr>
+                                    <% }); %>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+
+<%- include ("../partials/scripts") %>
+</body>
+</html>

@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="pl">
+<head>
+    <%- include ("../partials/head") %>
+</head>
+<body class="bg-light">
+<%- include ("../partials/header") %>
+<main>
+    <div class="container my-4">
+        <div class="row my-4">
+            <div class="col-12">
+                <a href="/movie/new" type="button" class="btn btn-primary">Dodaj film</a>
+            </div>
+        </div>
+        <div class="table-responsive">
+            <table class="table table-striped">
+                <thead>
+                <tr>
+                    <th scope="col">ID</th>
+                    <th scope="col">Nazwa</th>
+                    <th scope="col">Reżyser</th>
+                    <th scope="col">Kategoria</th>
+                    <th scope="col">Ocena</th>
+                    <th scope="col"></th>
+                </tr>
+                </thead>
+                <tbody>
+                <% movies && movies.forEach(function(movie) { %>
+                <tr>
+                    <th scope="row"><%= movie.id %></th>
+                    <td><%= movie.name %></td>
+                    <td><%= movie.director %></td>
+                    <td><%= movie.category %></td>
+                    <td><%= movie.rating %></td>
+                    <td>
+                        <a class="btn btn-primary" type="button" href="/movie/id/<%= movie.id %>">Podgląd</a>
+                        <button class="btn btn-danger" type="button" data-toggle="modal" data-target="#modalDelete<%= movie.id %>">
+                            Usuń
+                        </button>
+                        <%- include('../partials/modalDelete', {action: `/movie/id/${movie.id}`, id: movie.id}); %>
+                    </td>
+                </tr>
+                <% }); %>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</main>
+
+<%- include ("../partials/scripts") %>
+
+</body>
+</html>

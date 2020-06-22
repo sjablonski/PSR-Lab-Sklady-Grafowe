@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="pl">
+<head>
+    <%- include ("../partials/head") %>
+</head>
+<body class="bg-light">
+<%- include ("../partials/header") %>
+<main>
+    <div class="container my-4">
+        <form method="POST" enctype="application/x-www-form-urlencoded">
+            <div class="form-row">
+                <div class="form-group col-md-4">
+                    <label for="seanceDateTime">Data</label>
+                    <input type="datetime-local" class="form-control" id="seanceDateTime" name="seanceDateTime" required>
+                </div>
+                <div class="form-group col-md-4">
+                    <label for="movie">Film</label>
+                    <select class="form-control" id="movie" name="movieId" required>
+                        <option value="" disabled selected>Wybierz film</option>
+                        <% movies && movies.forEach(function(movie) { %>
+                            <option value="<%= movie.id %>"><%= movie.name %></option>
+                        <% }); %>
+                    </select>
+                </div>
+                <div class="form-group col-md-4">
+                    <label for="price">Cena</label>
+                    <input type="number" class="form-control" id="price" name="price" required>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group col-md-4">
+                    <label for="hall">Sala</label>
+                    <input type="text" class="form-control" id="hall" name="hall" required>
+                </div>
+                <div class="form-group col-md-4">
+                    <label for="availablePlace">Liczba dostępnych biletów</label>
+                    <input type="number" class="form-control" id="availablePlace" name="availablePlace" required>
+                </div>
+            </div>
+            <div class="d-flex flex-row-reverse">
+                <button type="submit" class="btn btn-primary">Dodaj</button>
+            </div>
+        </form>
+    </div>
+</main>
+
+<%- include ("../partials/scripts") %>
+
+</body>
+</html>

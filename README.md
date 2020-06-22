@@ -1,1 +1,1 @@
-# PSR-Lab-Sklady-Grafowe
+# PSR-Lab-Sklady-Kolumnowe

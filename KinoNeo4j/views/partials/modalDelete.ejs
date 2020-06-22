@@ -1,0 +1,26 @@
+<!-- Modal -->
+<div class="modal fade" id="modalDelete<%= id %>" tabindex="-1" role="dialog"
+     aria-labelledby="modalDeleteLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalDeleteLabel">Uwaga!</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                Czy na pewno chcesz usunąć ten rekord?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Nie
+                </button>
+                <form method="POST" action="<%= action %>" enctype="application/x-www-form-urlencoded">
+                    <input type="hidden" name="_method" value="DELETE">
+                    <input type="hidden" name="id" value="<%= id %>">
+                    <button type="submit" class="btn btn-danger">Tak</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
