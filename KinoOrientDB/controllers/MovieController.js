@@ -26,7 +26,6 @@ const movie = (pool) => {
                     .where({id})
                     .one();
                 await session.close();
-                console.log(movie);
 
                 res.render('pages/movie-id', {movie});
             } catch (err) {

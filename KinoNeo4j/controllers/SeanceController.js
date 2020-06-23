@@ -52,9 +52,13 @@ const seance = (session) => {
                     const properties = record.get(0);
                     const date = new Date(properties.date).setHours(0, 0, 0, 0);
                     const today = new Date().setHours(0, 0, 0, 0);
+                    const dateTime = new Date(properties.date + properties.time)
+                                        .toISOString()
+                                        .substr(0, 16)
+                                        .replace("T", " ");
                     const seance = {
                         id: properties.id.toNumber(),
-                        dateTime: new Date(properties.date + properties.time).toISOString().substr(0, 16),
+                        dateTime,
                         ...properties
                     }
                     if (date > today) {

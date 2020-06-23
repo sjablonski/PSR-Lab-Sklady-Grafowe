@@ -76,10 +76,18 @@ const seance = (pool) => {
                 const session = await pool.acquire();
                 const id = req.params.id;
                 const result = await session
-                    .select()
-                    .from("Seance")
-                    .where({id})
-                    .one();
+                    .select(`inV().id AS id,
+                             inV().date AS date,
+                             inV().time AS time,
+                             inV().hall AS hall,
+                             inV().place AS place,
+                             inV().availablePlace AS availablePlace,
+                             inV().price AS price,
+                             outV().name AS movieName,
+                             outV().id AS movieId`)
+                    .from(`SELECT FROM Movie_Seance`)
+                    .where('inV().id=:id')
+                    .one({id});
 
                 const dateTime = new Date(result.date + result.time).toISOString().substr(0, 19);
                 const seance = {
