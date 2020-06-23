@@ -20,7 +20,7 @@ let client;
 let pool;
 (async function() {
     try {
-        let client = await OrientDBClient.connect({
+        client = await OrientDBClient.connect({
             host: "localhost",
             pool: {
                 max: 10
@@ -35,9 +35,12 @@ let pool;
 
         pool = await client.sessions(sessionOptions);
         const session = await pool.acquire();
-        await session.command("create class Seance IF NOT EXISTS extends V").one();
-        await session.command("create class Movie IF NOT EXISTS extends V").one();
-        await session.command("create class Movie_Seance IF NOT EXISTS extends E").one();
+        const batch = `
+            create class Seance IF NOT EXISTS extends V;
+            create class Movie IF NOT EXISTS extends V;
+            create class Movie_Seance IF NOT EXISTS extends E;
+        `;
+        await session.batch(batch).all();
         await session.close();
 
         routes(app, pool);
