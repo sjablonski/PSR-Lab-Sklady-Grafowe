@@ -1,15 +1,15 @@
-const movie = (session) => {
+const {v4: uuidv4} = require('uuid');
+
+const movie = (pool) => {
     return {
         getAllMovies: async (req, res) => {
             try {
-                const result = await session.run("MATCH (movie:Movie) RETURN movie");
-                const movies = result.records.map(record => {
-                    const node = record.get('movie');
-                    return {
-                        id: node.identity.toNumber(),
-                        ...node.properties
-                    }
-                });
+                const session = await pool.acquire();
+                const movies = await session
+                    .select()
+                    .from("Movie")
+                    .all();
+                await session.close();
 
                 res.render('pages/movie', {movies});
             } catch (err) {
@@ -19,14 +19,14 @@ const movie = (session) => {
         getMovie: async (req, res) => {
             try {
                 const id = req.params.id;
-                const result = await session.run(
-                    `MATCH (movie:Movie) WHERE ID(movie)=${id} RETURN movie`
-                );
-                const node = result.records[0].get('movie');
-                const movie = {
-                    id: node.identity.toNumber(),
-                    ...node.properties
-                };
+                const session = await pool.acquire();
+                const movie = await session
+                    .select()
+                    .from("Movie")
+                    .where({id})
+                    .one();
+                await session.close();
+                console.log(movie);
 
                 res.render('pages/movie-id', {movie});
             } catch (err) {
@@ -42,7 +42,9 @@ const movie = (session) => {
         },
         addMoviePost: async (req, res) => {
             try {
+                const session = await pool.acquire();
                 const movie = {
+                    id: uuidv4().substr(0, 5),
                     name: req.body.movieName,
                     director: req.body.director,
                     category: req.body.category,
@@ -52,19 +54,10 @@ const movie = (session) => {
                     rating: req.body.rating,
                 };
 
-                await session.run(
-                    `CREATE (movie:Movie {
-                        name: $name, 
-                        director: $director,
-                        category: $category,
-                        country: $country,
-                        language: $language,
-                        runningTime: $runningTime,
-                        rating: $rating
-                    }) 
-                    RETURN movie`,
-                    movie
-                );
+                await session.create("VERTEX", "Movie")
+                    .set(movie)
+                    .one();
+                await session.close();
 
                 res.render('pages/success', {success: "Dodano film"});
             } catch (err) {
@@ -73,8 +66,9 @@ const movie = (session) => {
         },
         updateMovie: async (req, res) => {
             try {
+                const session = await pool.acquire();
+                const id = req.body.id;
                 const movie = {
-                    id: req.body.id,
                     name: req.body.movieName,
                     director: req.body.director,
                     category: req.body.category,
@@ -84,20 +78,11 @@ const movie = (session) => {
                     rating: req.body.rating,
                 };
 
-                await session.run(
-                    `MATCH (movie:Movie)
-                     WHERE id(movie)=${movie.id}
-                     SET
-                        movie.name = $name, 
-                        movie.director = $director,
-                        movie.category = $category,
-                        movie.country = $country,
-                        movie.language = $language,
-                        movie.runningTime = $runningTime,
-                        movie.rating = $rating
-                     RETURN movie`,
-                    movie
-                );
+                await session.update("Movie")
+                    .set(movie)
+                    .where({ id })
+                    .one();
+                await session.close();
 
                 res.render('pages/success', {success: "Zaktualizowano dane o filmie"});
             } catch (err) {
@@ -106,13 +91,13 @@ const movie = (session) => {
         },
         deleteMovie: async (req, res) => {
             try {
+                const session = await pool.acquire();
                 const id = req.body.id;
 
-                await session.run(
-                    `MATCH (movie:Movie)
-                     WHERE id(movie)=${id}
-                     DETACH DELETE movie`
-                );
+                await session.delete("VERTEX", "Movie")
+                    .where({ id })
+                    .one()
+                await session.close();
 
                 res.render('pages/success', {success: "Usunięto film"});
             } catch (err) {

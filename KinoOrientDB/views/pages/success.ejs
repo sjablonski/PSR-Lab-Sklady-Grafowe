@@ -1,0 +1,21 @@
+<!doctype html>
+<html lang="pl">
+<head>
+    <%- include ("../partials/head") %>
+</head>
+<body class="bg-light">
+<%- include ("../partials/header") %>
+<main>
+    <div class="container my-4">
+        <% if(typeof success !== 'undefined') { %>
+        <div class="alert alert-success" role="alert">
+            <%= success %>
+        </div>
+        <% } %>
+    </div>
+</main>
+
+<%- include ("../partials/scripts") %>
+
+</body>
+</html>

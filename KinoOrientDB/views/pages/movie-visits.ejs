@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="pl">
+<head>
+    <%- include ("../partials/head") %>
+</head>
+<body class="bg-light">
+<%- include ("../partials/header") %>
+<main>
+    <div class="container my-4">
+        <div class="row">
+            <div class="col-12">
+                <h4>Historia wizyt</h4>
+                <div class="table-responsive">
+                    <table class="table table-striped">
+                        <thead>
+                        <tr>
+                            <th scope="col">Data</th>
+                            <th scope="col">Typ</th>
+                            <th scope="col">Klient</th>
+                            <th scope="col">Pracownik</th>
+                            <th scope="col">Samochód</th>
+                            <th scope="col"></th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <% visits && visits.forEach(function(visit) { %>
+                            <tr>
+                                <td><%= visit.date %></td>
+                                <td><%= visit.type %></td>
+                                <td><a href="/client/id/<%= visit.clientId %>"><%= visit.clientName %></a></td>
+                                <td><a href="/employee/id/<%= visit.employeeId %>"><%= visit.employeeName %></a></td>
+                                <td><%= visit.carName %></td>
+                                <td>
+                                    <a href="/visit/id/<%= visit.visitId %>" type="button" class="btn btn-primary">Podgląd</a>
+                                </td>
+                            </tr>
+                        <% }); %>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+
+<%- include ("../partials/scripts") %>
+</body>
+</html>

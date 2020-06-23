@@ -1,5 +1,3 @@
-const {v4: uuidv4} = require('uuid');
-
 const seance = (session) => {
 
     return {
@@ -51,13 +49,13 @@ const seance = (session) => {
                      }`
                 );
                 result.records.forEach(record => {
-                    const time = new Date(record.get(0).date + record.get(0).time);
-                    const date = new Date(record.get(0).date).setHours(0, 0, 0, 0);
+                    const properties = record.get(0);
+                    const date = new Date(properties.date).setHours(0, 0, 0, 0);
                     const today = new Date().setHours(0, 0, 0, 0);
                     const seance = {
-                        id: record.get(0).id.toNumber(),
-                        dateTime: `${record.get(0).date} ${time.getHours()}:${time.getMinutes()}`,
-                        ...record.get(0)
+                        id: properties.id.toNumber(),
+                        dateTime: new Date(properties.date + properties.time).toISOString().substr(0, 16),
+                        ...properties
                     }
                     if (date > today) {
                         future.push(seance);
@@ -116,11 +114,11 @@ const seance = (session) => {
         },
         addSeancePost: async (req, res) => {
             try {
+                const movieId = req.body.movieId;
                 const seance = {
                     date: new Date(req.body.seanceDateTime).toISOString().substr(0, 10),
                     time: new Date(req.body.seanceDateTime).toISOString().substr(10, 14),
                     hall: req.body.hall,
-                    movieId: req.body.movieId,
                     price: req.body.price,
                     availablePlace: req.body.availablePlace,
                     place: new Array(parseInt(req.body.availablePlace)).fill("")
@@ -131,7 +129,6 @@ const seance = (session) => {
                         date: $date,
                         time: $time,
                         hall: $hall,
-                        movieId: $movieId,
                         price: $price,
                         availablePlace: $availablePlace,
                         place: $place
@@ -143,7 +140,7 @@ const seance = (session) => {
 
                 await session.run(
                     `MATCH (s:Seance), (m:Movie)
-                     WHERE ID(s) = ${seanceId} AND ID(m) = ${seance.movieId}
+                     WHERE ID(s) = ${seanceId} AND ID(m) = ${movieId}
                      CREATE (m)-[r:MOVIE_SEANCE]->(s)
                      RETURN type(r)`
                 );

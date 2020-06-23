@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="pl">
+<head>
+    <%- include ("../partials/head") %>
+</head>
+<body class="bg-light">
+<%- include ("../partials/header") %>
+<main>
+    <div class="container my-4">
+        <form name="reservation" method="POST" onsubmit="return validateForm()"
+              enctype="application/x-www-form-urlencoded">
+            <input type="hidden" name="seanceId" value="<%= seance.id %>">
+            <div class="form-row">
+                <div class="form-group col-md-6">
+                    <label for="firstName">Imię</label>
+                    <input type="text" class="form-control" id="firstName" name="firstName" required>
+                </div>
+                <div class="form-group col-md-6">
+                    <label for="lastName">Nazwisko</label>
+                    <input type="text" class="form-control" id="lastName" name="lastName" required>
+                </div>
+            </div>
+            <div class="form-row">
+                <label>Miejsca</label>
+                <div class="col-md-12">
+                    <% seance && seance.place.forEach(function(place, index) { %>
+                        <div class="form-check form-check-inline">
+                            <div class="custom-control custom-checkbox">
+                                <input type="checkbox" class="custom-control-input" id="place<%= index %>" name="places"
+                                       value="<%= index %>" <%= place ? "disabled" : null %>>
+                                <label class="custom-control-label" for="place<%= index %>"><%= index %></label>
+                            </div>
+                        </div>
+                    <% }); %>
+                </div>
+            </div>
+            <div class="d-flex flex-row-reverse">
+                <button type="submit" class="btn btn-primary">Dodaj</button>
+            </div>
+        </form>
+    </div>
+</main>
+
+<%- include ("../partials/scripts") %>
+
+<script>
+
+    function validateForm() {
+        const places = document.forms["reservation"]["places"];
+        const checked = [...places].some(place => place.checked);
+        if(!checked) {
+            alert("Proszę wybrać miejsce");
+            return false;
+        }
+    }
+
+</script>
+
+</body>
+</html>

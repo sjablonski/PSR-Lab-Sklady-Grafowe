@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="pl">
+<head>
+    <%- include ("../partials/head") %>
+</head>
+<body class="bg-light">
+<%- include ("../partials/header") %>
+<main>
+    <div class="container my-4">
+        <form method="POST" enctype="application/x-www-form-urlencoded">
+            <input type="hidden" name="_method" value="PUT">
+            <input type="hidden" name="id" value="<%= movie.id %>">
+            <div class="form-row">
+                <div class="form-group col-md-6">
+                    <label for="movieName">Nazwa</label>
+                    <input type="text" class="form-control" id="movieName" name="movieName" value="<%= movie.name %>" required>
+                </div>
+                <div class="form-group col-md-6">
+                    <label for="director">Reżyser</label>
+                    <input type="text" class="form-control" id="director" name="director" value="<%= movie.director %>" required>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group col-md-4">
+                    <label for="category">Kategoria</label>
+                    <select class="form-control" id="category" name="category" required>
+                        <option value="" disabled selected>Wybierz kategorię</option>
+                        <option value="Komieda">Komieda</option>
+                        <option value="Horror">Horror</option>
+                        <option value="Thriller">Thriller</option>
+                        <option value="Akcja">Akcja</option>
+                        <option value="Fantasy">Fantasy</option>
+                        <option value="Sci-Fi">Sci-Fi</option>
+                    </select>
+                </div>
+                <div class="form-group col-md-4">
+                    <label for="country">Kraj produkcji</label>
+                    <select class="form-control" id="country" name="country" required>
+                        <option value="" disabled selected>Wybierz kraj produkcji</option>
+                        <option value="Polska">Polska</option>
+                        <option value="Rosja">Rosja</option>
+                        <option value="Francja">Francja</option>
+                        <option value="Szwecja">Szwecja</option>
+                        <option value="Indie">Indie</option>
+                        <option value="Chiny">Chiny</option>
+                        <option value="Hiszpania">Hiszpania</option>
+                        <option value="Japonia">Japonia</option>
+                        <option value="USA">USA</option>
+                        <option value="Wielka Brytania">Wielka Brytania</option>
+                        <option value="Dania">Dania</option>
+                    </select>
+                </div>
+                <div class="form-group col-md-4">
+                    <label for="language">Język</label>
+                    <select class="form-control" id="language" name="language" required>
+                        <option value="" disabled selected>Wybierz język</option>
+                        <option value="Polski">Polski</option>
+                        <option value="Rosyjski">Rosyjski</option>
+                        <option value="Francuski">Francuski</option>
+                        <option value="Szwedzki">Szwedzki</option>
+                        <option value="Hindi">Hindi</option>
+                        <option value="Chiński">Chiński</option>
+                        <option value="Hiszpański">Hiszpański</option>
+                        <option value="Japoński">Japoński</option>
+                        <option value="Angielski">Angielski</option>
+                        <option value="Duński">Duński</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group col-md-4">
+                    <label for="runningTime">Czas trwania (min)</label>
+                    <input type="number" class="form-control" id="runningTime" name="runningTime" value="<%= movie.runningTime %>" required>
+                </div>
+                <div class="form-group col-md-4">
+                    <label for="rating">Ocena</label>
+                    <input type="number" min="1" max="10" class="form-control" id="rating" name="rating" value="<%= movie.rating %>" required>
+                </div>
+            </div>
+            <div class="d-flex flex-row-reverse">
+                <button type="submit" class="btn btn-primary">Edytuj</button>
+            </div>
+        </form>
+    </div>
+</main>
+
+<%- include ("../partials/scripts") %>
+
+<script>
+    const category = document.getElementById("category");
+    const country = document.getElementById("country");
+    const language = document.getElementById("language");
+    const movie = <%- JSON.stringify(movie) %>;
+    category.value = movie.category;
+    country.value = movie.country;
+    language.value = movie.language;
+</script>
+
+</body>
+</html>

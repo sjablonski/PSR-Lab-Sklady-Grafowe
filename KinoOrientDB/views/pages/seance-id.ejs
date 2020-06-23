@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="pl">
+<head>
+    <%- include ("../partials/head") %>
+</head>
+<body class="bg-light">
+<%- include ("../partials/header") %>
+<main>
+    <div class="container my-4">
+        <form method="POST" enctype="application/x-www-form-urlencoded">
+            <input type="hidden" name="_method" value="PUT">
+            <input type="hidden" name="id" value="<%= seance.id %>">
+            <div class="form-row">
+                <div class="form-group col-md-4">
+                    <label for="seanceDateTime">Data</label>
+                    <input type="datetime-local" class="form-control" id="seanceDateTime" name="seanceDateTime"
+                           value="<%= seance.dateTime %>" required>
+                </div>
+                <div class="form-group col-md-4">
+                    <label for="movie">Film</label>
+                    <input type="text" class="form-control" id="movie" name="movie"
+                           value="<%= seance.movieName %>" disabled required>
+                </div>
+                <div class="form-group col-md-4">
+                    <label for="price">Cena</label>
+                    <input type="number" class="form-control" id="price" name="price" value="<%= seance.price %>"
+                           required>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group col-md-4">
+                    <label for="hall">Sala</label>
+                    <input type="text" class="form-control" id="hall" name="hall" value="<%= seance.hall %>" required>
+                </div>
+                <div class="form-group col-md-4">
+                    <label for="availablePlace">Liczba dostępnych biletów</label>
+                    <input type="number" class="form-control" id="availablePlace" name="availablePlace"
+                           value="<%= seance.availablePlace %>" disabled required>
+                </div>
+            </div>
+            <div class="row mb-4">
+                <div class="col-12 accordion">
+                    <div class="card">
+                        <div class="card-header" id="headingOne">
+                            <h5 class="mb-0">
+                                <a class="btn-block" type="button" data-toggle="collapse" data-target="#collapseOne"
+                                   aria-expanded="true" aria-controls="collapseOne">
+                                    Miejsca
+                                </a>
+                            </h5>
+                        </div>
+                        <div id="collapseOne" class="collapse show" aria-labelledby="headingOne">
+                            <div class="card-body">
+                                <div class="table-responsive">
+                                    <table class="table table-striped">
+                                        <thead>
+                                        <tr>
+                                            <th scope="col">Numer miejsca</th>
+                                            <th scope="col">Osoba rezerwująca</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <% seance && seance.place.forEach(function(place, index) { %>
+                                            <tr>
+                                                <td><%= index %></td>
+                                                <td><%= place %></td>
+                                            </tr>
+                                        <% }); %>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="d-flex flex-row-reverse">
+                <button type="submit" class="btn btn-primary">Edytuj</button>
+            </div>
+        </form>
+    </div>
+</main>
+
+<%- include ("../partials/scripts") %>
+
+</body>
+</html>
